@@ -5,3 +5,7 @@ pub mod pawn_structure;
 pub mod center_control;
 pub mod trapped_pieces;
 pub mod static_exchange_evaluation;
+pub mod piece_square_tables;
+pub mod mobility;
+pub mod bishop_pair;
+pub mod rook_features;

@@ -158,8 +158,9 @@ impl ShakmatyAdapter {
             .to_string()
     }
 
-    // --- move generation ---------------------------------------------------
 
+    // generate all legal moves
+    // O(N) Complexity?
     #[inline]
     pub fn legal_moves(&self) -> MoveList {
         self.board.legal_moves().into_iter().map(Move).collect()
@@ -170,8 +171,8 @@ impl ShakmatyAdapter {
         self.board.capture_moves().into_iter().map(Move).collect()
     }
 
-    // --- make move (copy-make) --------------------------------------------
 
+    // Make move
     #[inline]
     pub fn play(&self, mv: Move) -> Self {
         let mut board = self.board.clone();
