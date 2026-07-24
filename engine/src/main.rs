@@ -4,5 +4,5 @@ pub mod evaluation;
 pub mod search;
 
 fn main() {
-    println!("Hello, world!");
+    
 }

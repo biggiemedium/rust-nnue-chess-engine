@@ -12,6 +12,11 @@ use crate::evaluation::piece_square_tables::tables;
 pub struct PieceSquareTables;
 
 impl PieceSquareTables {
+
+    fn new() -> PieceSquareTables {
+        Self
+    }
+
     /// Score, in centipawns, always from the owning side's point of view
     /// (i.e. always non-negated — the caller applies the sign).
     pub fn value(piece: PieceType, color: Color, square: Square) -> i16 {
@@ -21,20 +26,28 @@ impl PieceSquareTables {
             PieceType::Bishop => &tables::BISHOP_TABLE,
             PieceType::Rook => &tables::ROOK_TABLE,
             PieceType::Queen => &tables::QUEEN_TABLE,
-            PieceType::King => &tables::KING_TABLE,
+            PieceType::King => &tables::KING_MIDGAME_TABLE,
         };
 
         table[table_index(color, square)]
     }
 }
 
+// Default state / restarted state
+impl Default for PieceSquareTables {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl EvaluationTerm for PieceSquareTables {
-    /// White-relative: positive favours White.
     fn evaluate(&self, board: &ShakmatyAdapter) -> i32 {
+        // Walk every piece and add its placement bonus,
+        // White positive -> Black negative.
         let mut score = 0i32;
 
         board.for_each_piece(|square, piece| {
-            let value = PieceSquareTables::value(piece.piece_type, piece.color, square) as i32;
+            let value = Self::value(piece.piece_type, piece.color, square) as i32;
 
             match piece.color {
                 Color::White => score += value,

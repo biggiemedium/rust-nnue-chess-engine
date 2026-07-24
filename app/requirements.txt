@@ -1,0 +1,8 @@
+# Chess online integration
+python-lichess
+
+# Core ML
+torch>=2.3.0
+
+# Numerical operations
+numpy>=2.0.0
