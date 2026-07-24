@@ -1,5 +1,9 @@
 # Chess online integration
-python-lichess
+# last documented 2018). berserk is maintained by lichess-org. Requires 3.10+.
+berserk>=0.13.2
+
+# Chess rules, move generation, PGN/FEN, UCI engine bridge
+chess>=1.10.0
 
 # Core ML
 torch>=2.3.0
