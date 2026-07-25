@@ -5,6 +5,10 @@ berserk>=0.13.2
 # Chess rules, move generation, PGN/FEN, UCI engine bridge
 chess>=1.10.0
 
+# API
+fastapi>=0.116.0
+uvicorn[standard]>=0.35.0
+
 # Core ML
 torch>=2.3.0
 
