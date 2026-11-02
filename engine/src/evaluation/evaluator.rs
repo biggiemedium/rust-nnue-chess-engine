@@ -1,10 +1,13 @@
 //! Based off https://www.chessprogramming.org/Evaluation
 
 
-use crate::board::shakmaty_adapter::ShakmatyAdapter;
+use crate::board::Position;
+use crate::evaluation::material::material::MaterialEvaluator;
+use crate::evaluation::piece_square_tables::piece_square_tables::PieceSquareTables;
 
-pub trait EvaluationTerm {
-    fn evaluate(&self, board: &ShakmatyAdapter) -> i32;
+// Send -> the searcher (and its evaluator) gets moved onto the search thread
+pub trait EvaluationTerm: Send {
+    fn evaluate(&self, board: &Position) -> i32;
 }
 
 
@@ -17,12 +20,14 @@ impl Evaluator {
     pub fn new() -> Self {
         Self {
             terms: vec![
-               // TODO: Add our evaluators
+                Box::new(MaterialEvaluator::new()),
+                Box::new(PieceSquareTables::default()),
+                // NNUE replaces these once net-001 exists, they stay for gen 0 + baseline
             ],
         }
     }
 
-    pub fn evaluate(&self, board: &ShakmatyAdapter) -> i32 {
+    pub fn evaluate(&self, board: &Position) -> i32 {
 
         let score: i32 = self.terms
             .iter()
@@ -36,4 +41,11 @@ impl Evaluator {
         }
     }
 
+}
+
+// Default state / restarted state
+impl Default for Evaluator {
+    fn default() -> Self {
+        Self::new()
+    }
 }

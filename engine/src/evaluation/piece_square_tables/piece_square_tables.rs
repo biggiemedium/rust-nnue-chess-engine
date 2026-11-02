@@ -4,9 +4,8 @@
 //!
 
 use crate::board::{Color, PieceType, Square};
-use crate::board::shakmaty_adapter::ShakmatyAdapter;
+use crate::board::Position;
 use crate::evaluation::evaluator::EvaluationTerm;
-use crate::evaluation::piece_square_tables;
 use crate::evaluation::piece_square_tables::tables;
 
 pub struct PieceSquareTables;
@@ -41,7 +40,7 @@ impl Default for PieceSquareTables {
 }
 
 impl EvaluationTerm for PieceSquareTables {
-    fn evaluate(&self, board: &ShakmatyAdapter) -> i32 {
+    fn evaluate(&self, board: &Position) -> i32 {
         // Walk every piece and add its placement bonus,
         // White positive -> Black negative.
         let mut score = 0i32;

@@ -12,7 +12,7 @@
 //!     Move BY VALUE (Move is Copy).
 //!   * `legal_moves()` / `capture_moves()` return shakmaty's `MoveList`.
 
-use shakmaty::{fen::Fen, uci::UciMove, zobrist::Zobrist64, CastlingMode, Chess, Color as SmColor, EnPassantMode, FromSetup, Move as SmMove, Position as SmPosition, Role as SmRole, Setup, Square as SmSquare};
+use shakmaty::{fen::Fen, Bitboard, uci::UciMove, zobrist::Zobrist64, CastlingMode, Chess, Color as SmColor, EnPassantMode, FromSetup, Move as SmMove, Position as SmPosition, Role as SmRole, Square as SmSquare};
 
 // ---------------------------------------------------------------------------
 // Engine-neutral types
@@ -258,6 +258,17 @@ impl ShakmatyAdapter {
     #[inline]
     pub fn occupied_bitboard(&self) -> u64 {
         self.board.board().occupied().0
+    }
+
+    /// Every piece (both colours) attacking `sq`, sliders blocked by `occupied` not the real board.
+    /// SEE passes an occupancy with the pieces that already traded taken off -> x-rays show up.
+    /// Pieces not in `occupied` can still show up in the result, the caller masks them out.
+    #[inline]
+    pub fn attackers_to(&self, sq: Square, occupied: u64) -> u64 {
+        let b = self.board.board();
+        let sq = to_sm_square(sq);
+        let occ = Bitboard(occupied);
+        (b.attacks_to(sq, SmColor::White, occ) | b.attacks_to(sq, SmColor::Black, occ)).0
     }
 
     #[inline]

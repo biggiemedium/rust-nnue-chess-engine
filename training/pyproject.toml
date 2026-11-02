@@ -1,0 +1,25 @@
+[project]
+name = "chess-nnue"
+version = "0.1.0"
+description = "PyTorch trainer for the Chess-Project NNUE evaluation"
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.3.0",
+    "numpy>=2.0.0",
+]
+
+[project.optional-dependencies]
+# loss curves in tensorboard + report --plot
+tracking = ["tensorboard>=2.16", "matplotlib>=3.8"]
+dev = ["pytest>=8.0", "chess>=1.10.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["nnue"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "tests"]

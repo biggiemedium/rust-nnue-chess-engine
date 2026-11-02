@@ -1,42 +1,19 @@
-//! Evaluation priorities:
+//! Evaluation plan (NNUE).
 //!
-//! The evaluation function estimates how favorable a chess position is.
-//! Evaluators are ranked by importance and expected impact on playing strength.
+//! The real evaluation is the neural network in src/nnue, trained in training/.
+//! The hand written eval only sticks around for two jobs:
 //!
-//! Priority 1 - Material Evaluation
-//!     Measures the value of pieces remaining on the board.
-//!     This is the foundation of evaluation because winning material is the
-//!     most direct and reliable advantage.
+//!   1. Gen 0 - the net needs data before it exists, so the first round of
+//!      self play (src/datagen) runs on material + piece-square tables.
+//!   2. Baseline - every net gets tested against it so we can show the Elo gain.
 //!
-//! Priority 2 - Piece-Square Tables
-//!     Evaluates where pieces are located on the board.
-//!     A piece's value changes depending on its position (for example,
-//!     centralized knights are generally stronger than corner knights).
+//! Things like king safety, pawn structure, mobility etc. are NOT written by hand,
+//! that's exactly what the net learns from the data.
 //!
-//! Priority 3 - King Safety
-//!     Evaluates threats around the king, including pawn shields and enemy
-//!     attack zones. Preventing checkmate threats is more important than
-//!     gaining small positional advantages.
+//! Still needed but they live in search, not eval:
+//!   - Static exchange evaluation (search/static_exchange_evaluation.rs) - capture ordering + qsearch pruning
+//!   - Piece values (material.rs) - MVV-LVA and delta pruning
 //!
-//! Priority 4 - Mobility / Activity
-//!     Measures how many useful moves pieces have available.
-//!     Active pieces generally provide more control and future opportunities.
-//!
-//! Priority 5 - Pawn Structure
-//!     Evaluates long-term pawn weaknesses and strengths:
-//!     passed pawns, isolated pawns, doubled pawns, and backward pawns.
-//!
-//! Priority 6 - Center Control
-//!     Evaluates control of important central squares.
-//!     Central control improves piece activity and mobility.
-//!
-//! Priority 7 - Special Positional Features
-//!     Smaller bonuses that refine evaluation:
-//!    - Bishop pair advantage
-//!     - Rook placement (open files, 7th rank)
-//!     - Trapped pieces
-//!     - Endgame-specific adjustments
-//!
-//! Evaluation terms should be implemented independently and combined into a
-//! weighted final score. Material provides the baseline, while positional
-//! evaluators refine the estimate.
+//! TODO:
+//!   - Add MaterialEvaluator + PieceSquareTables to Evaluator::new()
+//!   - Taper the king table between KING_MIDGAME_TABLE and KING_ENDGAME_TABLE

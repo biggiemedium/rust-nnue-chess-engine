@@ -1,0 +1,5 @@
+# Lichess bot account API (official lichess-org SDK)
+berserk>=0.13.2
+
+# chess rules + talking to our engine over UCI (chess.engine)
+chess>=1.10.0

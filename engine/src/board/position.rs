@@ -159,6 +159,11 @@ impl Position {
     }
 
     #[inline]
+    pub fn attackers_to(&self, sq: Square, occupied: u64) -> u64 {
+        self.board.attackers_to(sq, occupied)
+    }
+
+    #[inline]
     pub fn count(&self, color: Color, piece_type: PieceType) -> u32 {
         self.board.count(color, piece_type)
     }

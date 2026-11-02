@@ -8,7 +8,7 @@
 
 
 use crate::board::{Color, PieceType};
-use crate::board::shakmaty_adapter::ShakmatyAdapter;
+use crate::board::Position;
 use crate::evaluation::evaluator::EvaluationTerm;
 
 pub struct MaterialEvaluator;
@@ -26,6 +26,15 @@ const PIECE_VALUES: [(PieceType, i32); 5] = [
     (PieceType::Queen, 900),
 ];
 
+/// Centipawn value of a piece type, king = 0 (it's never actually captured)
+pub fn piece_value(piece: PieceType) -> i32 {
+    PIECE_VALUES
+        .iter()
+        .find(|&&(p, _)| p == piece)
+        .map(|&(_, value)| value)
+        .unwrap_or(0) // king isn't in the table
+}
+
 impl MaterialEvaluator {
     pub fn new() -> Self {
         Self
@@ -40,7 +49,7 @@ impl Default for MaterialEvaluator {
 }
 
 impl EvaluationTerm for MaterialEvaluator {
-    fn evaluate(&self, board: &ShakmatyAdapter) -> i32 {
+    fn evaluate(&self, board: &Position) -> i32 {
         // For each piece type -> take White's count minus Black's count
         // and weight it by that piece's value -> then sum the results.
         PIECE_VALUES

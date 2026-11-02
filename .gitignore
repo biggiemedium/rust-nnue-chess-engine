@@ -1,2 +1,22 @@
 /target
 engine/target
+
+# credentials
+secrets.env
+*.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# training: data + weights are too big for git, nets go in GitHub Releases
+# metrics.csv / summary.json / meta.json / config.toml in runs/ ARE committed (the training history)
+training/data/*
+!training/data/.gitkeep
+training/runs/*/checkpoints/
+training/runs/*/tensorboard/
+*.nnue
+*.bin
+*.pt

@@ -1,0 +1,19 @@
+# net-001: first net, trained on gen 0 self play (material + PST engine)
+
+name = "net-001"
+
+[data]
+path = "data/gen0.bin"      # relative to training/
+val_fraction = 0.02
+
+[model]
+hidden = 256
+
+[train]
+epochs = 20
+batch_size = 16384
+lr = 1e-3
+weight_decay = 0.0
+wdl_lambda = 0.3            # 0 = only search score, 1 = only game result
+seed = 1
+log_every = 100             # steps between metrics.csv rows
